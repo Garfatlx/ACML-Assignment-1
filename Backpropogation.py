@@ -47,6 +47,10 @@ class neural_network:
                 return i
         return i
     
+    def get_inputlayer(self):
+        return self.inputlayer.weights
+    def get_hiddenlayer(self):
+        return self.hiddenlayer.weights
 
 class layer:
     def sigmoid(self,x):
