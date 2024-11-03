@@ -9,21 +9,6 @@ def sigmoid_derivative(x):
 def softmax(x):
     return np.exp(x) / np.sum(np.exp(x), axis=1, keepdims=True) 
 
-def normalize(x):
-    normalized = np.zeros_like(x)
-    max_indices = np.argmax(x, axis=1)
-    for i, idx in enumerate(max_indices):
-        normalized[i, idx] = 1
-    
-    return normalized
-
-def normalizederror(x):
-    sum = 0
-    for i in range(8):
-        for j in range(8):
-            sum += abs(x[i][j] - output[i][j])
-    return sum
-
 class layer:
     def __init__(self, input_size, output_size):
         self.weights = np.random.rand(input_size + 1, output_size)  # +1 for bias
@@ -71,30 +56,25 @@ learning_rate = 0.1
 
 # Example training loop
 for i in range(10000):
-    inputlayer_output = inputlayer.forward(input)
-    final_output = hiddenlayer.forward(inputlayer_output)
-    
-    # Calculate error
-    error = output - final_output
-    
-    # Backpropagation
-    hiddenlayer.backward(error)
-    inputlayer.backward(hiddenlayer.delta)
-    
-    # Update weights
-    hiddenlayer.update(learning_rate)
-    inputlayer.update(learning_rate)
+    for j in range(8):
+        inputlayer_output = inputlayer.forward(input[j:j+1])
+        final_output = hiddenlayer.forward(inputlayer_output)
+        
+        # Calculate error
+        error = output[j:j+1] - final_output
+        
+        # Backpropagation
+        hiddenlayer.backward(error)
+        inputlayer.backward(hiddenlayer.delta)
+        
+        # Update weights
+        hiddenlayer.update(learning_rate)
+        inputlayer.update(learning_rate)    
 
-    # Normalize the output and calculate the error, this error is not for training but for checking convergence
-    normalized_output = normalize(final_output)
-    normalized_error = normalizederror(normalized_output)
-
-   
-
-    if normalized_error == 0:
-        print("Converged at Epoch: ", i)
-        break
-    
+    if i % 1000 == 0:
+        print("Epoch: ", i)
+        print(softmax(final_output))
+        print("Error: ", np.mean(np.square(output[7:8] - hiddenlayer.output)))
 
 
 
