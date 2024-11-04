@@ -1,9 +1,9 @@
 import numpy as np
 
 class neural_network:
-    def __init__(self,input,output,learning_rate):
+    def __init__(self,input,target,learning_rate):
         self.input = input
-        self.output = output
+        self.target = target
         self.learning_rate = learning_rate
         self.inputlayer = layer(8, 3)
         self.hiddenlayer = layer(3, 8)
@@ -20,7 +20,7 @@ class neural_network:
         sum = 0
         for i in range(8):
             for j in range(8):
-                sum += abs(x[i][j] - self.output[i][j])
+                sum += abs(x[i][j] - self.target[i][j])
         return sum
 
     def train(self):
@@ -29,7 +29,7 @@ class neural_network:
             final_output = self.hiddenlayer.forward(inputlayer_output)
             
             # Calculate error
-            error = self.output - final_output
+            error = self.target - final_output
             
             # Backpropagation
             self.hiddenlayer.backward(error)
