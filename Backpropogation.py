@@ -5,7 +5,7 @@ class neural_network:
         self.input = input
         self.target = target
         self.learning_rate = learning_rate
-        self.inputlayer = layer(8, 3)
+        self.inputlayer = layer(8,3)
         self.hiddenlayer = layer(3, 8)
 
     def normalize(self, x):
